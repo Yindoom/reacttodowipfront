@@ -1,5 +1,6 @@
 import React, { ChangeEvent } from "react";
 import Todo from "../Interfaces/todo.interface";
+import Card from "react-bootstrap/Card";
 
 
 export class TodoComponent extends React.Component<{
@@ -8,18 +9,23 @@ export class TodoComponent extends React.Component<{
     updateTodo: any
 }> {
     render() {
+
         const todo = this.props.todo;
         return (
-            <div>
-                <h3>
-                    {todo.description}
-                </h3>
-                <p>Due: {todo.deadline}</p> <input id="check" type="checkbox" checked={todo.isDone} onChange={(event) => this.todoDone(event.target)} />
-            </div>
-        )
+            <Card border="primary" style={{ width: '18rem' }}>
+                <Card.Body>
+                    <Card.Title>{todo.deadline}</Card.Title>
+                    <Card.Text>
+                        {todo.description}
+                    </Card.Text>
+                    <input type="checkbox" checked={todo.isDone} onChange={(event) => this.updateTodo(event.target)} />
+                </Card.Body>
+            </Card>
+            
+        );
     }
 
-    todoDone(check: HTMLInputElement) {
+    updateTodo(check: HTMLInputElement) {
         const todo = this.props.todo;
         const update: Todo = {
             deadline: todo.deadline,

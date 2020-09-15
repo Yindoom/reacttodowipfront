@@ -28,23 +28,31 @@ export class Dashboard extends Component<Iprops, Istate> {
         this.getTodos();
     }
 
-
-
     getTodos() {
         fetch("https://localhost:5001/todo")
             .then(res => res.json())
             .then(data => {
-                this.setState({ todos: data, loading: false })
+                this.setState({ todos: [...data], loading: false })
             });
     }
 
-    updateTodo(update: Todo) {
+    updateTodo = (update: Todo) => {
+        debugger;
         fetch("https://localhost:5001/todo/" + update.id,
-            { method: "POST", body: JSON.stringify(update) })
+            {
+                method: 'PUT', // or 'PUT'
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(update),
+            })
             .then(res => res.json())
             .then(data => {
+                debugger;
                 const todos = this.state.todos;
-                let c = todos.find(todo => todo.id === update.id);
+                const index = todos.findIndex(t => t.id === data.id);
+                todos[index] = data;
+                this.setState({ todos: [...todos] });
             });
     }
 
@@ -61,12 +69,18 @@ export class Dashboard extends Component<Iprops, Istate> {
                 </div>
             )
         }
-        return (
+        if (this.state.todos && this.state.todos.length > 0) {
+            return (
 
-            this.state.todos.map((todo: Todo, index: number) => (
-                <TodoComponent todo={todo} index={index} updateTodo={this.updateTodo} />
-            ))
-        );
+                this.state.todos.map((todo: Todo, index: number) => (
+                    <TodoComponent key={todo.id} todo={todo} index={index} updateTodo={this.updateTodo} />
+                ))
+            );
+        } else {
+            return (
+                <h3>Your list of todos is empty, add a new one to keep track of your schedule</h3>
+            )
+        }
     }
 }
 
