@@ -3,6 +3,7 @@ import { css } from "@emotion/core";
 import ClipLoader from "react-spinners/ClipLoader";
 import TodoComponent from "../Components/todo";
 import Todo from "../Interfaces/todo.interface";
+import "./styles.css";
 
 const override = css`
   display: block;

@@ -23,17 +23,19 @@ export class TodoComponent extends React.Component<{
         const isToday = today.getDate() === todoDay.getDate();
         const isLate = today.getDate() >= todoDay.getDate();
         return (
-            <Card border="secondary" style={{ width: '18rem' }} onClick={ () => this.updateTodo() } >
-                <Card.Body>
-                    <Card.Title>{date}</Card.Title>
-                    <Card.Text>
-                        {todo.description}
-                    </Card.Text>
-                    <input type="checkbox" checked={todo.isDone}/>
-                </Card.Body>
-                {isToday && !todo.isDone && <Card.Footer>This task is due today.</Card.Footer>}
-                {isLate && !todo.isDone && <Card.Footer>This task is late</Card.Footer>}
-            </Card>
+            <div className="todo">
+                <Card border="secondary" style={{ width: '100%' }} onClick={() => this.updateTodo()} >
+                    <Card.Body>
+                        <Card.Title>{date}</Card.Title>
+                        <Card.Text>
+                            {todo.description}
+                        </Card.Text>
+                        <input type="checkbox" checked={todo.isDone} readOnly />
+                    </Card.Body>
+                    {isToday && !todo.isDone && <Card.Footer>This task is due today.</Card.Footer>}
+                    {isLate && !todo.isDone && <Card.Footer>This task is late</Card.Footer>}
+                </Card>
+            </div>
 
         );
     }
