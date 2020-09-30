@@ -9,7 +9,6 @@ export class TodoComponent extends React.Component<{
     updateTodo: any
 }> {
     render() {
-
         const todo = this.props.todo;
         const date = new Intl.DateTimeFormat("en-GB", {
             year: "numeric",
@@ -23,6 +22,7 @@ export class TodoComponent extends React.Component<{
         const isToday = today.getDate() === todoDay.getDate();
         const isLate = today.getDate() >= todoDay.getDate();
         return (
+            // <div className={todo.isDone ? "todo done" : "todo notdone"}>
             <div className="todo">
                 <Card border="secondary" style={{ width: '100%' }} onClick={() => this.updateTodo()} >
                     <Card.Body>

@@ -12,6 +12,7 @@ const override = css`
 `;
 
 interface Istate {
+    done: Todo[],
     todos: Todo[],
     loading: boolean
 }
@@ -24,6 +25,7 @@ export class Dashboard extends Component<Iprops, Istate> {
         super(props);
         this.state = {
             todos: [],
+            done: [],
             loading: true
         }
         this.getTodos();
@@ -33,15 +35,14 @@ export class Dashboard extends Component<Iprops, Istate> {
         fetch("https://localhost:5001/todo")
             .then(res => res.json())
             .then(data => {
-                this.setState({ todos: [...data], loading: false })
+                this.setTodos(data)
             });
     }
 
     updateTodo = (update: Todo) => {
-        debugger;
         fetch("https://localhost:5001/todo/" + update.id,
             {
-                method: 'PUT', // or 'PUT'
+                method: 'PUT', // or 'POST'
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -49,12 +50,38 @@ export class Dashboard extends Component<Iprops, Istate> {
             })
             .then(res => res.json())
             .then(data => {
-                debugger;
+                const done = this.state.done;
                 const todos = this.state.todos;
-                const index = todos.findIndex(t => t.id === data.id);
-                todos[index] = data;
-                this.setState({ todos: [...todos] });
+                let filtered: Todo[];
+                if (data.isDone) {
+                    debugger;
+                    filtered = todos.filter((value) => { return value.id !== data.id });
+                    done.unshift(data);
+                    this.setState({ done: done, todos: filtered });
+                } else {
+                    debugger;
+                    filtered = done.filter((value) => {
+                        debugger;
+                        return value.id !== data.id
+                    });
+                    todos.unshift(data)
+                    this.setState({ todos: todos, done: filtered });
+                }
             });
+    }
+
+    setTodos(todos: Todo[]) {
+        const done: Todo[] = [];
+        const notdone: Todo[] = [];
+        todos.sort((t1, t2) => {
+            return new Date(t1.deadline).getTime() - new Date(t2.deadline).getTime();
+        });
+        todos.map((todo: Todo, index: number) => {
+
+            if (todo.isDone) done.push(todo);
+            else notdone.push(todo);
+        })
+        this.setState({ todos: [...notdone], done: [...done], loading: false })
     }
 
     render() {
@@ -70,12 +97,23 @@ export class Dashboard extends Component<Iprops, Istate> {
                 </div>
             )
         }
-        if (this.state.todos && this.state.todos.length > 0) {
+        if (this.state.todos.length > 0 || this.state.done.length > 0) {
             return (
+                <><ul className="todoList">
+                    {this.state.todos.map((todo: Todo, index: number) => (
+                        <li>
+                            <TodoComponent key={todo.id} todo={todo} index={index} updateTodo={this.updateTodo} />
+                        </li>
+                    ))}
+                </ul>
 
-                this.state.todos.map((todo: Todo, index: number) => (
-                    <TodoComponent key={todo.id} todo={todo} index={index} updateTodo={this.updateTodo} />
-                ))
+                    <ul className="doneList">
+                        {this.state.done.map((todo: Todo, index: number) => (
+                            <li>
+                                <TodoComponent key={todo.id} todo={todo} index={index} updateTodo={this.updateTodo} />
+                            </li>
+                        ))}
+                    </ul></>
             );
         } else {
             return (

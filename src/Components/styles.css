@@ -1,6 +1,24 @@
 .todo {
-    display: grid;
     width: 18rem;
     margin: 5px;
     margin-top: 10px;
+    margin-right: 10px;
+}
+
+ul {
+    list-style-type: none;
+}
+
+.doneList {
+    float: right;
+    opacity: 50%;
+}
+
+
+.todoList {
+    width: 90%;
+}
+
+.todo {
+    float: left;
 }
