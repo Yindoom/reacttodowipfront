@@ -28,6 +28,9 @@ export class Dashboard extends Component<Iprops, Istate> {
             done: [],
             loading: true
         }
+    }
+
+    componentDidMount() {
         this.getTodos();
     }
 
@@ -76,7 +79,7 @@ export class Dashboard extends Component<Iprops, Istate> {
         todos.sort((t1, t2) => {
             return new Date(t1.deadline).getTime() - new Date(t2.deadline).getTime();
         });
-        todos.map((todo: Todo, index: number) => {
+        todos.map((todo: Todo) => {
 
             if (todo.isDone) done.push(todo);
             else notdone.push(todo);

@@ -4,8 +4,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import {
   BrowserRouter as Router,
   Switch,
-  Route,
-  Link
+  Route, 
+  NavLink
 } from "react-router-dom";
 import Dashboard from "../src/Components/dashboard";
 import Home from "../src/Components/home";
@@ -15,14 +15,21 @@ function App() {
   return (
     <Router>
       <div>
-        <ul>
-          <li>
-            <Link to="/">Home</Link>
-          </li>
-          <li>
-            <Link to="/dashboard">Dashboard</Link>
-          </li>
-        </ul>
+        <div className="navbar">
+          <ul className="content">
+            <li>
+              <NavLink className="navlink" to="/">
+                <div className="navButton">Home</div>
+              </NavLink>
+            </li>
+            <li>
+              <NavLink className="navlink" to="/dashboard">
+                <div className="navButton">Dashboard</div>
+              </NavLink>
+            </li>
+          </ul>
+        </div>
+
 
         <hr />
 
